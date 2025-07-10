@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import Image from "next/image";
 
@@ -16,17 +15,30 @@ const Navbar = () => {
             className="rounded-full"
           />
           <span className="text-2xl font-bold text-emerald-900">TidyTasks</span>
+          <button className="btn btn-primary">Test Button</button>
         </div>
 
         {/* Right Side: Menu Links */}
         <ul className="flex gap-5 text-emerald-900 font-medium">
-          <li className="hover:text-emerald-600 cursor-pointer">Home</li>
-          <li className="hover:text-emerald-600 cursor-pointer">About</li>
-          <li className="hover:text-emerald-600 cursor-pointer">
-            <button className="btn btn-outline">Login</button>
+          <li>
+            <button className="btn btn-outline cursor-pointer hover:text-emerald-600">
+              Home
+            </button>
           </li>
           <li>
-            <button className="btn btn-active btn-primary">Register</button>
+            <button className="btn btn-outline cursor-pointer hover:text-emerald-600">
+              About
+            </button>
+          </li>
+          <li>
+            <button className="text-green-100 cursor-pointer bg-emerald-950 hover:text-emerald-600">
+              Login
+            </button>
+          </li>
+          <li>
+            <button className="text-green-100 bg-emerald-950 cursor-pointer hover:text-emerald-600">
+              Register
+            </button>
           </li>
         </ul>
       </nav>
