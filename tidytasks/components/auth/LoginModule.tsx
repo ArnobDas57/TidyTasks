@@ -4,6 +4,14 @@ import { FaLock } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import Image from "next/image";
 import Silk from "../ui/Silk";
+import { Button } from "@mui/material";
+import { keyframes } from "@emotion/react";
+
+const gradientAnimation = keyframes`
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+`;
 
 const LoginModule = () => {
   return (
@@ -44,8 +52,26 @@ const LoginModule = () => {
               Remember Me
             </label>
 
-            <div className="mt-2">
-              <button className="btn btn-primary w-full">Login</button>
+            <div className="mt-2 flex justify-center">
+              <Button
+                sx={{
+                  color: "white",
+                  border: "outline",
+                  px: 2,
+                  borderColor: "black",
+                  fontFamily: "Inter, sans-serif",
+                  background:
+                    "linear-gradient(-45deg, #AFF8C8, #0F2830, #AFF8C8, #0F2830)",
+                  backgroundSize: "400% 400%",
+                  ":hover": {
+                    boxShadow: "0 2px 2px #1D5527",
+                    transform: "scale(1.05)",
+                  },
+                  animation: `${gradientAnimation} 5s linear infinite`,
+                }}
+              >
+                Login
+              </Button>
             </div>
           </form>
         </div>

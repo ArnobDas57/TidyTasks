@@ -23,28 +23,32 @@ const Navbar = () => {
         </div>
 
         {/* Right Side: Menu Links */}
-        <div className="flex gap-5 font-medium">
-          <Link
-            href="/login"
-            className={`${
-              pathname === "/login"
-                ? "bg-emerald-200 hover:text-green-800 text-black"
-                : "bg-emerald-950 hover:text-green-300 text-white"
-            } p-2 rounded-sm font-bold cursor-pointer`}
-          >
-            Login
-          </Link>
-          <Link
-            href="/register"
-            className={`${
-              pathname === "/register"
-                ? "bg-emerald-200 hover:text-green-800 text-black"
-                : "bg-emerald-950 hover:text-green-300 text-white"
-            } p-2 rounded-sm font-bold cursor-pointer`}
-          >
-            Register
-          </Link>
-        </div>
+        {pathname.includes("/login") || pathname.includes("/register") ? (
+          <div className="flex gap-5 font-medium">
+            <Link
+              href="/login"
+              className={`${
+                pathname === "/login"
+                  ? "bg-emerald-200 hover:text-green-800 text-black"
+                  : "bg-emerald-950 hover:text-green-300 text-white"
+              } p-2 rounded-sm font-bold cursor-pointer`}
+            >
+              Login
+            </Link>
+            <Link
+              href="/register"
+              className={`${
+                pathname === "/register"
+                  ? "bg-emerald-200 hover:text-green-800 text-black"
+                  : "bg-emerald-950 hover:text-green-300 text-white"
+              } p-2 rounded-sm font-bold cursor-pointer`}
+            >
+              Register
+            </Link>
+          </div>
+        ) : (
+          ""
+        )}
       </nav>
     </header>
   );
