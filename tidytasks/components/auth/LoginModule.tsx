@@ -6,22 +6,11 @@ import Image from "next/image";
 
 const LoginModule = () => {
   return (
-    <div className="flex w-full h-screen p-1.5">
+    <div className="flex w-70% h-full p-1">
       {/* Left Side: Login Content */}
-      <div className="relative w-1/2 mx-auto bg-green-100 rounded-lg shadow-md p-8 pt-16">
-        {/* Top-left logo */}
-        <div className="absolute top-4 left-4">
-          <Image
-            src="/logo.png"
-            width={80}
-            height={80}
-            alt="TidyTasks"
-            className="rounded-full"
-          />
-        </div>
-
+      <div className="relative w-1/2 mx-auto bg-green-100 rounded-lg shadow-md p-8">
         {/* Centered content */}
-        <div className="flex flex-col items-center gap-6 mt-30">
+        <div className="flex flex-col items-center gap-6 mt-20">
           <h1 className="text-5xl font-semibold text-emerald-950 text-center">
             Welcome back!
           </h1>
@@ -34,7 +23,7 @@ const LoginModule = () => {
           <form className="w-full flex flex-col gap-6 mt-4" action="login">
             <div className="flex items-center gap-2">
               <input
-                className="input input-bordered w-full"
+                className="input input-bordered w-full p-4"
                 placeholder="Username/Email"
               />
               <MdEmail className="text-xl text-gray-600" />
@@ -42,7 +31,7 @@ const LoginModule = () => {
 
             <div className="flex items-center gap-2">
               <input
-                className="input input-bordered w-full"
+                className="input input-bordered w-full p-4"
                 placeholder="Password"
                 type="password"
               />
@@ -62,13 +51,13 @@ const LoginModule = () => {
       </div>
 
       {/* Right Side: Image */}
-      <div className="w-1/2 relative bg-emerald-500">
+      <div className="w-1/2 relative bg-green-100 justify-items-center">
         <Image
-          src="/login-side.jpg"
+          src="/logo.png"
           alt="Login Visual"
-          layout="fill"
-          objectFit="cover"
-          className="rounded-l-lg"
+          width={400}
+          height={400}
+          className="rounded-full mt-20"
         />
       </div>
     </div>

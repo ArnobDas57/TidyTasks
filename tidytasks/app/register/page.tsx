@@ -1,7 +1,12 @@
 import React from "react";
+import RegisterModule from "@/components/auth/RegisterModule";
 
 const RegisterPage = () => {
-  return <div>RegisterPage</div>;
+  return (
+    <div>
+      <RegisterModule />
+    </div>
+  );
 };
 
 export default RegisterPage;

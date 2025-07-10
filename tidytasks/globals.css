@@ -2,8 +2,7 @@
 
 :root {
   --background: #a6ffcaca;
-  --foreground: #0F2B30;
-
+  --foreground: #0f2b30;
   --font-sans: "Inter", sans-serif;
 }
 
@@ -15,8 +14,7 @@
 
 body {
   background-color: var(--background);
-  padding: 1rem;
   color: var(--foreground);
   font-family: var(--font-sans);
-  transition: background-color 0.3s, color 0.3s;
+  transition: background-color 1s, color 1s;
 }

@@ -1,8 +1,81 @@
 "use client";
 import React from "react";
+import { FaLock } from "react-icons/fa";
+import { MdEmail } from "react-icons/md";
+import Image from "next/image";
+import Silk from "../ui/Silk";
 
 const RegisterModule = () => {
-  return <div>RegisterModule</div>;
+  return (
+    <div className="flex w-70% h-full p-1">
+      {/* Left Side: Image */}
+      <div className="w-1/2 relative overflow:hidden bg-green-100 flex justify-center items-center">
+        <div className="absolute inset-0 z-0">
+          <Silk
+            speed={7}
+            scale={1.2}
+            color="#24FFAB"
+            noiseIntensity={0}
+            rotation={0}
+          />
+        </div>
+        <div className="z-10">
+          <Image
+            src="/logo.png"
+            alt="Register Visual"
+            width={400}
+            height={400}
+            className="rounded-full"
+          />
+        </div>
+      </div>
+
+      {/* Right Side: Register Content */}
+      <div className="relative w-1/2 mx-auto bg-green-100 rounded-lg shadow-md p-8">
+        {/* Centered content */}
+        <div className="flex flex-col items-center gap-6 mt-20">
+          <h1 className="text-5xl font-semibold text-emerald-950 text-center">
+            Sign Up
+          </h1>
+
+          <h2 className="text-sm font-medium text-emerald-950 text-center">
+            Create an account to join TidyTasks and simplify task management!
+          </h2>
+
+          {/* Regisetr Form */}
+          <form className="w-full flex flex-col gap-6 mt-4" action="login">
+            <div className="flex items-center gap-2">
+              <input
+                className="input input-bordered w-full p-4"
+                placeholder="Username/Email"
+              />
+              <MdEmail className="text-xl text-gray-600" />
+            </div>
+
+            <div className="flex items-center gap-2">
+              <input
+                className="input input-bordered w-full p-4"
+                placeholder="Password"
+                type="password"
+              />
+              <FaLock className="text-xl text-gray-600" />
+            </div>
+
+            <label className="label justify-start">
+              <input type="checkbox" defaultChecked className="checkbox mr-2" />
+              Remember Me
+            </label>
+
+            <div className="mt-2">
+              <button className="btn btn-primary w-full bg-gradient-to-br">
+                Register
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default RegisterModule;
