@@ -9,7 +9,7 @@ const RegisterModule = () => {
   return (
     <div className="flex w-70% h-full p-1">
       {/* Left Side: Image */}
-      <div className="w-1/2 relative overflow:hidden bg-green-100 flex justify-center items-center">
+      <div className="w-1/2 relative overflow-hidden bg-green-100 flex justify-center items-center rounded-2xl">
         <div className="absolute inset-0 z-0">
           <Silk
             speed={7}
@@ -31,7 +31,7 @@ const RegisterModule = () => {
       </div>
 
       {/* Right Side: Register Content */}
-      <div className="relative w-1/2 mx-auto bg-green-100 rounded-lg shadow-md p-8">
+      <div className="relative w-1/2 mx-auto bg-green-100 shadow-md p-8 rounded-2xl">
         {/* Centered content */}
         <div className="flex flex-col items-center gap-6 mt-20">
           <h1 className="text-5xl font-semibold text-emerald-950 text-center">
