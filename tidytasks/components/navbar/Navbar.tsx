@@ -47,7 +47,14 @@ const Navbar = () => {
             </Link>
           </div>
         ) : (
-          ""
+          <div className="flex gap-5 font-medium">
+            <Link
+              href="/login"
+              className="bg-emerald-200 hover:text-green-800 text-black p-2 rounded-sm font-bold cursor-pointer"
+            >
+              Logout
+            </Link>
+          </div>
         )}
       </nav>
     </header>
