@@ -2,6 +2,7 @@
 import React from "react";
 import { FaLock } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
+import { IoPersonSharp } from "react-icons/io5";
 import Image from "next/image";
 import Silk from "../ui/Silk";
 import { Button } from "@mui/material";
@@ -55,7 +56,14 @@ const RegisterModule = () => {
             <div className="flex items-center gap-2">
               <input
                 className="input input-bordered w-full p-4"
-                placeholder="Username/Email"
+                placeholder="Username"
+              />
+              <IoPersonSharp className="text-xl text-gray-600" />
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                className="input input-bordered w-full p-4"
+                placeholder="Email"
               />
               <MdEmail className="text-xl text-gray-600" />
             </div>
@@ -64,6 +72,15 @@ const RegisterModule = () => {
               <input
                 className="input input-bordered w-full p-4"
                 placeholder="Password"
+                type="password"
+              />
+              <FaLock className="text-xl text-gray-600" />
+            </div>
+
+            <div className="flex items-center gap-2">
+              <input
+                className="input input-bordered w-full p-4"
+                placeholder="Confirm Password"
                 type="password"
               />
               <FaLock className="text-xl text-gray-600" />

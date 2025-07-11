@@ -54,7 +54,14 @@ const TaskDashboard = () => {
   };
 
   return (
-    <Box sx={{ display: "flex", height: "100vh", backgroundColor: "#dcfbdb" }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "row",
+        minHeight: "100%",
+        backgroundColor: "#dcfbdb",
+      }}
+    >
       {/* Sidebar */}
       <Box
         sx={{
