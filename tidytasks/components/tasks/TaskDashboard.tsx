@@ -12,6 +12,8 @@ import {
   InputLabel,
   keyframes,
 } from "@mui/material";
+import TaskCard from "./TaskCard";
+import { Task } from "@/types/task";
 
 const gradientAnimation = keyframes`
   0% { background-position: 0% 50%; }
@@ -19,36 +21,52 @@ const gradientAnimation = keyframes`
   100% { background-position: 0% 50%; }
 `;
 
-type mockTasksType = {
-  id: number;
-  title: string;
-  status: string;
-  priority: string;
-};
-
 // 🧪 Mock Task Data
-const mockTasks: mockTasksType[] = [
-  { id: 1, title: "Design System", status: "To Do", priority: "High" },
+const mockTasks: Task[] = [
   {
-    id: 2,
-    title: "API Integration",
-    status: "In Progress",
-    priority: "Medium",
+    id: "1",
+    title: "Design System",
+    description: "this is a test description",
+    completion_status: "To Do",
+    due_date: "today",
+    priority: "high",
   },
-  { id: 3, title: "Fix Bugs", status: "In Review", priority: "Low" },
-  { id: 4, title: "Launch Prep", status: "Done", priority: "High" },
+  {
+    id: "2",
+    title: "API Integration",
+    description: "this is a test description",
+    completion_status: "In Progress",
+    due_date: "today",
+    priority: "medium",
+  },
+  {
+    id: "2",
+    title: "Fix Bugs",
+    description: "this is a test description",
+    completion_status: "In Review",
+    due_date: "today",
+    priority: "low",
+  },
+  {
+    id: "4",
+    title: "Launch Prep",
+    description: "this is a test description",
+    completion_status: "Done",
+    due_date: "today",
+    priority: "high",
+  },
 ];
 
 const columns: string[] = ["To Do", "In Progress", "In Review", "Done"];
 
 const TaskDashboard = () => {
-  const [user, setUser] = useState("Ronaldo");
+  const user = "Ronaldo";
   const [priorityFilter, setPriorityFilter] = useState("All");
 
   const getFilteredTasks = (status: string) => {
     return mockTasks.filter(
       (task) =>
-        task.status === status &&
+        task.completion_status === status &&
         (priorityFilter === "All" || task.priority === priorityFilter)
     );
   };
@@ -72,7 +90,7 @@ const TaskDashboard = () => {
         }}
       >
         <Typography variant="h6" fontWeight="bold" mb={2}>
-          {user}'s Tasks
+          {user}&apos;s Tasks
         </Typography>
 
         <Typography variant="body2" mt={1}>
@@ -141,7 +159,7 @@ const TaskDashboard = () => {
         {/* Task Columns */}
         <Grid container spacing={2}>
           {columns.map((title) => (
-            <Grid item xs={12} sm={6} md={3} key={title}>
+            <Grid key={title}>
               <Paper
                 elevation={3}
                 sx={{ p: 2, minHeight: 500, backgroundColor: "#eaffea" }}
@@ -162,27 +180,7 @@ const TaskDashboard = () => {
                 >
                   {title}
                 </Typography>
-
-                {/* ✅ Dynamic Task Cards */}
-                {getFilteredTasks(title).map((task) => (
-                  <Box
-                    key={task.id}
-                    sx={{
-                      p: 2,
-                      mb: 2,
-                      borderRadius: 2,
-                      boxShadow: 1,
-                      backgroundColor: "#fff",
-                    }}
-                  >
-                    <Typography variant="subtitle1" fontWeight="medium">
-                      {task.title}
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      Priority: {task.priority}
-                    </Typography>
-                  </Box>
-                ))}
+                <TaskCard tasks={getFilteredTasks(title)} />
               </Paper>
             </Grid>
           ))}
