@@ -1,3 +1,4 @@
+"use server";
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/utils/supabase/server";
 import type { TaskPriority, TaskCompletionStatus } from "@/types/task"; // adjust import if needed

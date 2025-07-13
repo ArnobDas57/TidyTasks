@@ -9,6 +9,7 @@ import { Button } from "@mui/material";
 import { keyframes } from "@emotion/react";
 import { supabase } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const gradientAnimation = keyframes`
   0% { background-position: 0% 50%; }
@@ -88,7 +89,7 @@ const RegisterModule = () => {
             <div className="flex items-center gap-2">
               <input
                 className="input input-bordered w-full p-4"
-                placeholder="Username (optional)"
+                placeholder="Username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
@@ -153,6 +154,19 @@ const RegisterModule = () => {
               >
                 Register
               </Button>
+            </div>
+
+            <div className="mt-10 text-center text-sm">
+              Already have an account?{" "}
+              <Link href="/login" className="underline underline-offset-4">
+                Sign In 
+              </Link>
+            </div>
+
+            <div className="mt-10 text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
+              By clicking register, you agree to our{" "}
+              <a href="#">Terms of Service</a> and{" "}
+              <a href="#">Privacy Policy</a>.
             </div>
           </div>
         </div>

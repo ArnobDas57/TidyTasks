@@ -19,7 +19,9 @@ const Navbar = () => {
             alt="TidyTasks"
             className="rounded-full"
           />
-          <span className="text-2xl font-bold text-emerald-900">TidyTasks</span>
+          <span className="animated-gradient-text text-2xl font-bold tracking-wider">
+            TidyTasks
+          </span>
         </div>
 
         {/* Right Side: Menu Links */}
