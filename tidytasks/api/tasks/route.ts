@@ -13,6 +13,23 @@ const validStatuses: TaskCompletionStatus[] = [
 
 const validPriorities: TaskPriority[] = ["low", "medium", "high", "urgent"];
 
+export const getAuthenticatedUser = async () => {
+  const supabase = createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return {
+      user: null,
+      response: NextResponse.json({ error: "Unauthorized" }, { status: 401 }),
+    };
+  }
+
+  return { user, supabase };
+};
+
 // GET - Fetch all tasks
 export async function GET() {
   const supabase = createClient();
