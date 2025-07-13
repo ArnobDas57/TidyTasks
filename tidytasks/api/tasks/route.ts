@@ -1,53 +1,69 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@/utils/supabase/server";
 
-// GET request for fetching all tasks for logged-in users
+// GET - Fetch all tasks
 export async function GET() {
-  const tasks = await fetch("http://localhost:5000/api/tasks").then((res) =>
-    res.json()
-  );
+  const supabase = await createClient();
+
+  const { data: tasks, error } = await supabase
+    .from("tasks")
+    .select("*")
+    .eq("user_id", user.id);
+
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 
   return NextResponse.json(tasks);
 }
 
-// POST request for creating new task
-export async function POST(request: Request) {
+// POST - Create a new task
+export async function POST(request: NextRequest) {
+  const supabase = createClient();
   const body = await request.json();
 
-  const res = await fetch("http://localhost:5000/tasks", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
-  const task = await res.json();
+  const { data: task, error } = await supabase
+    .from("tasks")
+    .insert([body])
+    .select()
+    .single();
+
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 
   return NextResponse.json(task);
 }
 
-// PUT request for updating task
-export async function PUT(request: Request) {
+// PUT - Update an existing task
+export async function PUT(request: NextRequest) {
+  const supabase = await createClient();
   const body = await request.json();
 
-  const res = await fetch(`http://localhost:5000/tasks/${body.id}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
+  const { data: task, error } = await supabase
+    .from("tasks")
+    .update(body)
+    .eq("id", body.id)
+    .select()
+    .single();
 
-  const task = await res.json();
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
   return NextResponse.json(task);
 }
 
-// DELETE request for deleting task
-export async function DELETE(request: Request) {
+// DELETE - Delete a task
+export async function DELETE(request: NextRequest) {
+  const supabase = await createClient();
   const body = await request.json();
 
-  const res = await fetch(`http://localhost:5000/tasks${body.id}`, {
-    method: "DELETE",
-  });
+  const { error } = await supabase.from("tasks").delete().eq("id", body.id);
 
-  return NextResponse.json(res);
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  return NextResponse.json({ success: true });
 }
