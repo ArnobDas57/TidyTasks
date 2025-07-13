@@ -1,11 +1,14 @@
 "use client";
-import React from "react";
+
+import { useState } from "react";
 import { FaLock } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import Image from "next/image";
 import Silk from "../ui/Silk";
 import { Button } from "@mui/material";
 import { keyframes } from "@emotion/react";
+import { supabase } from "@/utils/supabase/client";
+import { useRouter } from "next/navigation";
 
 const gradientAnimation = keyframes`
   0% { background-position: 0% 50%; }
@@ -14,11 +17,34 @@ const gradientAnimation = keyframes`
 `;
 
 const LoginModule = () => {
+  const router = useRouter();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      setErrorMsg("Please fill in all required fields.");
+      return;
+    }
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      setErrorMsg(error.message);
+    } else {
+      router.push("/dashboard");
+    }
+  };
+
   return (
     <div className="flex w-70% h-full p-1">
       {/* Left Side: Login Content */}
       <div className="relative w-1/2 mx-auto bg-green-100 shadow-md p-8 rounded-2xl">
-        {/* Centered content */}
         <div className="flex flex-col items-center gap-6 mt-20">
           <h1 className="text-5xl font-semibold text-emerald-950 text-center">
             Welcome back!
@@ -29,11 +55,14 @@ const LoginModule = () => {
           </h2>
 
           {/* Login Form */}
-          <form className="w-full flex flex-col gap-6 mt-4" action="login">
+          <div className="w-full flex flex-col gap-6 mt-4">
             <div className="flex items-center gap-2">
               <input
                 className="input input-bordered w-full p-4"
-                placeholder="Username/Email"
+                placeholder="Email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <MdEmail className="text-xl text-gray-600" />
             </div>
@@ -43,17 +72,19 @@ const LoginModule = () => {
                 className="input input-bordered w-full p-4"
                 placeholder="Password"
                 type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
               <FaLock className="text-xl text-gray-600" />
             </div>
 
-            <label className="label justify-start">
-              <input type="checkbox" defaultChecked className="checkbox mr-2" />
-              Remember Me
-            </label>
+            {errorMsg && (
+              <p className="text-sm text-red-600 text-center">{errorMsg}</p>
+            )}
 
             <div className="mt-2 flex justify-center">
               <Button
+                onClick={handleLogin}
                 sx={{
                   color: "white",
                   border: "outline",
@@ -73,13 +104,12 @@ const LoginModule = () => {
                 Login
               </Button>
             </div>
-          </form>
+          </div>
         </div>
       </div>
 
       {/* Right Side: Image */}
       <div className="relative w-1/2 overflow-hidden flex justify-center items-center bg-green-100 rounded-2xl">
-        {/* Silk as background */}
         <div className="absolute inset-0 z-0">
           <Silk
             speed={7}
@@ -90,7 +120,6 @@ const LoginModule = () => {
           />
         </div>
 
-        {/* Logo on top of Silk */}
         <div className="z-10 mt-10">
           <Image
             src="/logo.png"

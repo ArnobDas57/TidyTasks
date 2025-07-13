@@ -1,4 +1,4 @@
-import React from "react";
+"use client";
 import LoginModule from "@/components/auth/LoginModule";
 
 const LoginPage = () => {
