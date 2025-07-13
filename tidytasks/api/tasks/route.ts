@@ -13,6 +13,7 @@ const validStatuses: TaskCompletionStatus[] = [
 
 const validPriorities: TaskPriority[] = ["low", "medium", "high", "urgent"];
 
+// Helper function for auth check
 export const getAuthenticatedUser = async () => {
   const supabase = createClient();
 
@@ -32,18 +33,9 @@ export const getAuthenticatedUser = async () => {
 
 // GET - Fetch all tasks
 export async function GET() {
-  const supabase = createClient();
+  const { user, supabase, response } = await getAuthenticatedUser();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return NextResponse.json(
-      { error: "User not authenticated" },
-      { status: 401 }
-    );
-  }
+  if (!user) return response;
 
   const { data: tasks, error } = await supabase
     .from("tasks")
@@ -59,17 +51,9 @@ export async function GET() {
 
 // POST - Create a new task
 export async function POST(request: NextRequest) {
-  const supabase = createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { user, supabase, response } = await getAuthenticatedUser();
 
-  if (!user) {
-    return NextResponse.json(
-      { error: "User not authenticated" },
-      { status: 401 }
-    );
-  }
+  if (!user) return response;
 
   const body = await request.json();
   const {
@@ -126,17 +110,9 @@ export async function POST(request: NextRequest) {
 
 // PUT - Update an existing task
 export async function PUT(request: NextRequest) {
-  const supabase = createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { user, supabase, response } = await getAuthenticatedUser();
 
-  if (!user) {
-    return NextResponse.json(
-      { error: "User not authenticated" },
-      { status: 401 }
-    );
-  }
+  if (!user) return response;
 
   const body = await request.json();
   const { id, title, description, completion_status, due_date, priority } =
@@ -193,17 +169,9 @@ export async function PUT(request: NextRequest) {
 
 // DELETE - Delete a task
 export async function DELETE(request: NextRequest) {
-  const supabase = createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { user, supabase, response } = await getAuthenticatedUser();
 
-  if (!user) {
-    return NextResponse.json(
-      { error: "User not authenticated" },
-      { status: 401 }
-    );
-  }
+  if (!user) return response;
 
   const body = await request.json();
   const { id } = body;
