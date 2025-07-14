@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import "@/components/ui/globals.css";
-import Navbar from "@/components/navbar/Navbar";
+import "@/globals.css";
 import Footer from "@/components/footer/Footer";
+import ClientLayout from "@/app/ClientLayout";
 
 export const metadata: Metadata = {
   title: "TidyTasks",
@@ -19,8 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body className="min-h-screen flex flex-col bg-green-200 font-sans">
-        <Navbar />
-        <main className="flex-grow px-2">{children}</main>
+        <ClientLayout>{children}</ClientLayout>
         <Footer />
       </body>
     </html>

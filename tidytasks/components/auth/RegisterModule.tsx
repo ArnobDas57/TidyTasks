@@ -3,6 +3,8 @@ import { useState } from "react";
 import { FaLock } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { IoPersonSharp } from "react-icons/io5";
+import { AlertCircleIcon } from "lucide-react";
+import { Alert, AlertTitle } from "@/components/ui/alert";
 import Image from "next/image";
 import Silk from "../ui/Silk";
 import { Button } from "@mui/material";
@@ -130,7 +132,13 @@ const RegisterModule = () => {
             </div>
 
             {errorMsg && (
-              <p className="text-sm text-red-600 text-center">{errorMsg}</p>
+              <Alert
+                variant="destructive"
+                className="bg-zinc-200 p-3 my-3 transition-shadow ease-in-out animate-pulse"
+              >
+                <AlertCircleIcon />
+                <AlertTitle>{errorMsg}</AlertTitle>
+              </Alert>
             )}
 
             <div className="mt-2 flex justify-center">
@@ -156,10 +164,10 @@ const RegisterModule = () => {
               </Button>
             </div>
 
-            <div className="mt-10 text-center text-sm">
+            <div className="mt-10 text-center text-sm bg-green-200 border-2 p-1">
               Already have an account?{" "}
               <Link href="/login" className="underline underline-offset-4">
-                Sign In 
+                Sign In
               </Link>
             </div>
 

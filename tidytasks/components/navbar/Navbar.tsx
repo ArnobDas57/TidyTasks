@@ -7,6 +7,8 @@ import Image from "next/image";
 const Navbar = () => {
   const pathname = usePathname();
 
+  const authLinks = ["/login", "/register", "/forgotpassword"];
+
   return (
     <header className={`w-full mb-10`}>
       <nav className="navbar bg-green-100 shadow-sm p-5 flex w-full items-center justify-between">
@@ -19,13 +21,16 @@ const Navbar = () => {
             alt="TidyTasks"
             className="rounded-full"
           />
-          <span className="animated-gradient-text text-2xl font-bold tracking-wider">
+          <Link
+            href="/"
+            className="animated-gradient-text text-2xl font-bold tracking-wider"
+          >
             TidyTasks
-          </span>
+          </Link>
         </div>
 
         {/* Right Side: Menu Links */}
-        {pathname.includes("/login") || pathname.includes("/register") ? (
+        {authLinks.includes(pathname) ? (
           <div className="flex gap-5 font-medium">
             <Link
               href="/login"
