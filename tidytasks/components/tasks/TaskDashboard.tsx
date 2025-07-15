@@ -3,8 +3,9 @@ import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import TaskCard from "./TaskCard";
 import { Task, TaskCompletionStatus, TaskPriority } from "@/types/task";
-import { Loader2 } from "lucide-react";
+import { AlertCircleIcon, Loader2 } from "lucide-react";
 import CreateTaskModal from "./CreateTaskModal";
+import { Alert, AlertTitle } from "../ui/alert";
 
 const TaskDashboard = () => {
   const [priorityFilter, setPriorityFilter] = useState("All");
@@ -34,6 +35,7 @@ const TaskDashboard = () => {
       });
 
       const data = await res.json();
+      console.log("Fetched data:", data);
 
       if (Array.isArray(data)) {
         setTasks(data);
@@ -129,6 +131,15 @@ const TaskDashboard = () => {
             </div>
           ))}
         </div>
+
+        {errorMsg && (
+          <div className="mt-10">
+            <Alert variant="destructive">
+              <AlertCircleIcon />
+              <AlertTitle>{errorMsg}</AlertTitle>
+            </Alert>
+          </div>
+        )}
       </main>
     </div>
   );
