@@ -76,6 +76,7 @@ const TaskDashboard = () => {
               onChange={(e) => setPriorityFilter(e.target.value)}
             >
               <option value="All">All</option>
+              <option value="Urgent">Low</option>
               <option value="High">High</option>
               <option value="Medium">Medium</option>
               <option value="Low">Low</option>
@@ -93,9 +94,9 @@ const TaskDashboard = () => {
               key={title}
               className="bg-yellow-100 rounded-md shadow p-4 w-64 min-h-[500px]"
             >
-              <div className="bg-green-500 rounded-md shadow w-30">
+              <div className="bg-green-200 rounded-md shadow w-50">
                 <h2
-                  className={`text-lg font-bold mb-4 ml-2 ${
+                  className={`text-lg font-bold mb-4 text-center ${
                     title === "To Do"
                       ? "text-blue-600"
                       : title === "In Progress"
