@@ -1,19 +1,11 @@
 "use client";
-import { useState } from "react";
 import { Task } from "@/types/task";
-interface TaskCardProps {
-  tasks: Task[];
-}
 
-const TaskCard = ({ tasks }: TaskCardProps) => {
-  const [cardTasks] = useState(tasks);
-
+const TaskCard = ({ task }: { task: Task }) => {
   return (
     <>
       <div>
-        {cardTasks.map((card: Task, index: number) => {
-          return <h1 key={index}>This is a task lmao {card.title}</h1>;
-        })}
+        <h1>This is a task lmao {task.title}</h1>
       </div>
     </>
   );

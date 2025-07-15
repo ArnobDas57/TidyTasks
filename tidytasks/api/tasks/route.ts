@@ -1,6 +1,9 @@
 "use server";
+
+import { cookies } from "next/headers";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/utils/supabase/server";
 import type { TaskPriority, TaskCompletionStatus } from "@/types/task"; // adjust import if needed
 
 const validStatuses: TaskCompletionStatus[] = [
@@ -8,14 +11,13 @@ const validStatuses: TaskCompletionStatus[] = [
   "In Progress",
   "In Review",
   "Done",
-  "",
 ];
 
-const validPriorities: TaskPriority[] = ["low", "medium", "high", "urgent"];
+const validPriorities: TaskPriority[] = ["Low", "Medium", "High", "Urgent"];
 
 // Helper function for auth check
 export const getAuthenticatedUser = async () => {
-  const supabase = createClient();
+  const supabase = createServerComponentClient({ cookies });
 
   const {
     data: { user },

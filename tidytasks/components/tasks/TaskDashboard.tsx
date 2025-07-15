@@ -2,12 +2,15 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import TaskCard from "./TaskCard";
-import { Task, TaskCompletionStatus } from "@/types/task";
+import { Task, TaskCompletionStatus, TaskPriority } from "@/types/task";
+import { Loader2 } from "lucide-react";
+import CreateTaskModal from "./CreateTaskModal";
 
 const TaskDashboard = () => {
   const [priorityFilter, setPriorityFilter] = useState("All");
   const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
   const [tasks, setTasks] = useState<Task[]>([]);
   const completion_status: TaskCompletionStatus[] = [
     "To Do",
@@ -49,8 +52,13 @@ const TaskDashboard = () => {
     }
   };
 
-  const getFilteredTasksByStatus = (status: string) => {
-    return tasks.filter((task) => task.completion_status === status);
+  const getFilteredTasksByPriority = (status: string) => {
+    if (status === "All") return tasks;
+    return tasks.filter((task) => task.priority === status);
+  };
+
+  const handleCreateTask = () => {
+    setModalOpen(true);
   };
 
   return (
@@ -69,6 +77,7 @@ const TaskDashboard = () => {
         {/* Top Bar */}
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold">Tasks</h1>
+          {loading && <Loader2 className="animate-spin h-5 w-5 text-black" />}
           <div className="flex items-center gap-4">
             <select
               className="border border-gray-300 rounded-md px-3 py-1 text-sm"
@@ -76,12 +85,15 @@ const TaskDashboard = () => {
               onChange={(e) => setPriorityFilter(e.target.value)}
             >
               <option value="All">All</option>
-              <option value="Urgent">Low</option>
+              <option value="Urgent">Urgent</option>
               <option value="High">High</option>
               <option value="Medium">Medium</option>
               <option value="Low">Low</option>
             </select>
-            <Button className="bg-gradient-to-r from-green-400 to-emerald-800 text-white px-4 py-2 rounded-md shadow-md transform transition-all duration-300 hover:scale-105 hover:shadow-lg hover:brightness-110 active:scale-95 animate-pulse">
+            <Button
+              onClick={() => handleCreateTask()}
+              className="bg-gradient-to-r from-green-400 to-emerald-800 text-white px-4 py-2 rounded-md shadow-md transform transition-all duration-300 hover:scale-105 hover:shadow-lg hover:brightness-110 active:scale-95 animate-pulse"
+            >
               + Create Task
             </Button>
           </div>
@@ -89,6 +101,7 @@ const TaskDashboard = () => {
 
         {/* Task Columns */}
         <div className="flex justify-center gap-4">
+          {modalOpen && <CreateTaskModal />}
           {completion_status.map((title) => (
             <div
               key={title}
@@ -110,7 +123,9 @@ const TaskDashboard = () => {
                 </h2>
               </div>
 
-              {/* Map TaskCards here if needed */}
+              {getFilteredTasksByPriority(priorityFilter).map((task) => (
+                <TaskCard key={task.task_id} task={task} />
+              ))}
             </div>
           ))}
         </div>
