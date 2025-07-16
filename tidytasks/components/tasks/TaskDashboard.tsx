@@ -8,11 +8,14 @@ import CreateTaskModal from "./CreateTaskModal";
 import { Alert, AlertTitle } from "../ui/alert";
 
 const TaskDashboard = () => {
-  const [priorityFilter, setPriorityFilter] = useState("All");
+  const [priorityFilter, setPriorityFilter] = useState<TaskPriority | "All">(
+    "All"
+  );
   const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [tasks, setTasks] = useState<Task[]>([]);
+
   const completion_status: TaskCompletionStatus[] = [
     "To Do",
     "In Progress",
@@ -26,25 +29,21 @@ const TaskDashboard = () => {
 
   const getTasks = async () => {
     setLoading(true);
+    setErrorMsg("");
     try {
-      const res = await fetch("/api/tasks", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const res = await fetch("/api/tasks", { method: "GET" });
 
       const data = await res.json();
-      console.log("Fetched data:", data);
+      console.log("✅ API Response from /api/tasks:", data);
 
-      if (Array.isArray(data)) {
-        setTasks(data);
-      } else if (data && Array.isArray(data.tasks)) {
+      if (res.ok && Array.isArray(data.tasks)) {
         setTasks(data.tasks);
       } else {
+        setErrorMsg("Failed to load tasks.");
         setTasks([]);
       }
     } catch (error: unknown) {
+      console.error("❌ Error fetching tasks:", error);
       setTasks([]);
       setErrorMsg(
         error instanceof Error ? error.message : "An unknown error occurred."
@@ -54,37 +53,42 @@ const TaskDashboard = () => {
     }
   };
 
-  const getFilteredTasksByPriority = (status: string) => {
-    if (status === "All") return tasks;
-    return tasks.filter((task) => task.priority === status);
+  const getFilteredTasksByPriority = (priorityFilter: string) => {
+    if (priorityFilter === "All") return tasks;
+    return tasks.filter((task) => task.priority === priorityFilter);
   };
 
-  const handleCreateTask = () => {
-    setModalOpen(true);
+  const handleCreateTask = () => setModalOpen(true);
+
+  const handleTaskCreated = () => {
+    setModalOpen(false);
+    getTasks(); // Refresh after new task is created
   };
 
   return (
     <div className="flex min-h-screen bg-green-100">
       {/* Sidebar */}
-      <aside className="w-64 bg-green-200 p-4 border-r">
-        <h2 className="text-xl font-bold mb-4">User&apos;s Tasks</h2>
-        <nav className="space-y-2">
-          <p className="text-sm">Dashboard</p>
-          <p className="text-sm">Tasks</p>
+      <aside className="w-64 bg-green-200 p-4 border-r overflow-auto">
+        <h2 className="text-xl font-bold mb-6">User&apos;s Tasks</h2>
+        <nav className="space-y-2 text-gray-700">
+          <p className="cursor-pointer hover:text-green-900">Dashboard</p>
+          <p className="cursor-pointer hover:text-green-900">Tasks</p>
         </nav>
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-6">
+      <main className="flex-1 p-6 flex flex-col">
         {/* Top Bar */}
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold">Tasks</h1>
-          {loading && <Loader2 className="animate-spin h-5 w-5 text-black" />}
           <div className="flex items-center gap-4">
+            {loading && <Loader2 className="animate-spin h-5 w-5 text-black" />}
             <select
               className="border border-gray-300 rounded-md px-3 py-1 text-sm"
               value={priorityFilter}
-              onChange={(e) => setPriorityFilter(e.target.value)}
+              onChange={(e) =>
+                setPriorityFilter(e.target.value as TaskPriority | "All")
+              }
             >
               <option value="All">All</option>
               <option value="Urgent">Urgent</option>
@@ -93,48 +97,67 @@ const TaskDashboard = () => {
               <option value="Low">Low</option>
             </select>
             <Button
-              onClick={() => handleCreateTask()}
-              className="bg-gradient-to-r from-green-400 to-emerald-800 text-white px-4 py-2 rounded-md shadow-md transform transition-all duration-300 hover:scale-105 hover:shadow-lg hover:brightness-110 active:scale-95 animate-pulse"
+              onClick={handleCreateTask}
+              className="bg-gradient-to-r from-green-400 to-emerald-800 text-white px-4 py-2 rounded-md shadow-md transform transition duration-300 hover:scale-105 hover:shadow-lg hover:brightness-110 active:scale-95"
             >
               + Create Task
             </Button>
           </div>
         </div>
 
+        {/* Modal */}
+        {modalOpen && <CreateTaskModal onSuccess={handleTaskCreated} />}
+
         {/* Task Columns */}
-        <div className="flex justify-center gap-4">
-          {modalOpen && <CreateTaskModal />}
-          {completion_status.map((title) => (
-            <div
-              key={title}
-              className="bg-yellow-100 rounded-md shadow p-4 w-64 min-h-[500px]"
-            >
-              <div className="bg-green-200 rounded-md shadow w-50">
+        <div className="flex flex-wrap gap-6 justify-center">
+          {completion_status.map((status) => {
+            const filteredTasks = getFilteredTasksByPriority(
+              priorityFilter
+            ).filter((task) => task.completion_status === status);
+
+            return (
+              <div
+                key={status}
+                className="bg-yellow-100 rounded-md shadow p-4 w-64 min-h-[500px] flex flex-col"
+              >
                 <h2
                   className={`text-lg font-bold mb-4 text-center ${
-                    title === "To Do"
+                    status === "To Do"
                       ? "text-blue-600"
-                      : title === "In Progress"
+                      : status === "In Progress"
                       ? "text-yellow-600"
-                      : title === "In Review"
+                      : status === "In Review"
                       ? "text-red-600"
                       : "text-green-600"
                   }`}
                 >
-                  {title}
+                  {status}
                 </h2>
-              </div>
 
-              {getFilteredTasksByPriority(priorityFilter).map((task) => (
-                <TaskCard key={task.task_id} task={task} />
-              ))}
-            </div>
-          ))}
+                <div className="flex-grow overflow-auto flex flex-col gap-3">
+                  {filteredTasks.length > 0 ? (
+                    filteredTasks.map((task) => (
+                      <TaskCard
+                        key={task.task_id}
+                        task={task}
+                        onDelete={getTasks}
+                      />
+                    ))
+                  ) : (
+                    <p className="text-center text-gray-500 mt-auto">
+                      No tasks here
+                    </p>
+                  )}
+                </div>
+              </div>
+            );
+          })}
         </div>
 
+        {/* Error Message */}
         {errorMsg && (
-          <div className="mt-10">
-            <Alert variant="destructive">
+          <div className="mt-10 max-w-lg mx-auto">
+            <Alert variant="destructive" className="flex items-center gap-2">
               <AlertCircleIcon />
               <AlertTitle>{errorMsg}</AlertTitle>
             </Alert>

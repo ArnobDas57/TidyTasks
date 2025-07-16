@@ -1,11 +1,11 @@
-"use server";
+export const runtime = "nodejs";
 
 import { cookies } from "next/headers";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-
+import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { NextRequest, NextResponse } from "next/server";
-import type { TaskPriority, TaskCompletionStatus } from "@/types/task"; // adjust import if needed
+import type { TaskPriority, TaskCompletionStatus } from "@/types/task";
 
+// ✅ Valid enums
 const validStatuses: TaskCompletionStatus[] = [
   "To Do",
   "In Progress",
@@ -15,17 +15,22 @@ const validStatuses: TaskCompletionStatus[] = [
 
 const validPriorities: TaskPriority[] = ["Low", "Medium", "High", "Urgent"];
 
-// Helper function for auth check
+// ✅ Auth helper using safe cookies()
 export const getAuthenticatedUser = async () => {
-  const supabase = createServerComponentClient({ cookies });
+  const cookieStore = cookies();
+  const supabase = createRouteHandlerClient({
+    cookies: () => cookieStore,
+  });
 
   const {
     data: { user },
+    error,
   } = await supabase.auth.getUser();
 
-  if (!user) {
+  if (error || !user) {
     return {
       user: null,
+      supabase,
       response: NextResponse.json({ error: "Unauthorized" }, { status: 401 }),
     };
   }
@@ -33,10 +38,9 @@ export const getAuthenticatedUser = async () => {
   return { user, supabase };
 };
 
-// GET - Fetch all tasks
+// ✅ GET - Fetch tasks for user
 export async function GET() {
   const { user, supabase, response } = await getAuthenticatedUser();
-
   if (!user) return response;
 
   const { data: tasks, error } = await supabase
@@ -48,13 +52,13 @@ export async function GET() {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  return NextResponse.json(tasks);
+  console.log("📦 API Hit: /api/tasks");
+  return NextResponse.json({ tasks });
 }
 
-// POST - Create a new task
+// ✅ POST - Create task
 export async function POST(request: NextRequest) {
   const { user, supabase, response } = await getAuthenticatedUser();
-
   if (!user) return response;
 
   const body = await request.json();
@@ -66,7 +70,6 @@ export async function POST(request: NextRequest) {
     priority,
   } = body;
 
-  // Basic validation
   if (!title || typeof title !== "string") {
     return NextResponse.json(
       { error: "Title is required and must be a string." },
@@ -110,10 +113,9 @@ export async function POST(request: NextRequest) {
   return NextResponse.json(task);
 }
 
-// PUT - Update an existing task
+// ✅ PUT - Update task
 export async function PUT(request: NextRequest) {
   const { user, supabase, response } = await getAuthenticatedUser();
-
   if (!user) return response;
 
   const body = await request.json();
@@ -169,10 +171,9 @@ export async function PUT(request: NextRequest) {
   return NextResponse.json(task);
 }
 
-// DELETE - Delete a task
+// ✅ DELETE - Delete task
 export async function DELETE(request: NextRequest) {
   const { user, supabase, response } = await getAuthenticatedUser();
-
   if (!user) return response;
 
   const body = await request.json();

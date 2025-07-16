@@ -43,7 +43,7 @@ export default function Home() {
             variant="outline"
             className="bg-green-400 hover:bg-green-700 hover:scale-105 text-white font-semibold px-6 py-2 rounded-xl shadow-md hover:shadow-lg transition-transform duration-200"
           >
-            <Link href="/login">Get Started Free</Link>
+            <Link href={"/login"}>Get Started Free</Link>
           </Button>
         </div>
       </div>
