@@ -11,7 +11,7 @@ export interface Task {
   description: string | null;
   completion_status: TaskCompletionStatus;
   due_date: string | null;
-  createdAt?: string | null;
+  created_at?: string | null;
   priority: TaskPriority;
   user_id: string;
 }

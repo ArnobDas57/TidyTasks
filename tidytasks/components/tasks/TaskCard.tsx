@@ -56,7 +56,11 @@ const TaskCard = ({ task, onDelete }: TaskCardProps) => {
         <h2 className="text-base font-semibold mb-1">{task.title}</h2>
         <p className="text-sm mb-1">{task.description}</p>
         <p className="text-xs text-green-700 mt-2">
-          Created at: {new Date(task.createdAt ?? "").toLocaleString()}
+          Created at:{" "}
+          {new Date(task.created_at).toLocaleString(undefined, {
+            dateStyle: "medium", // e.g., Jul 13, 2025
+            timeStyle: "short", // e.g., 5:00 AM
+          })}
         </p>
         <button
           onClick={handleDeleteTask}
