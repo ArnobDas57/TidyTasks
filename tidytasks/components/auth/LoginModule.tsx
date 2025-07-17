@@ -155,8 +155,8 @@ const LoginModule = () => {
 
         <div className="z-10 mt-10">
           <Image
-            src="/logo.png"
-            alt="Login Visual"
+            src="/logo.PNG"
+            alt="logo"
             width={400}
             height={400}
             className="rounded-full"

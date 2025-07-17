@@ -25,7 +25,7 @@ const Navbar = () => {
         {/* Left: Logo + Title */}
         <div className="flex items-center gap-2">
           <Image
-            src="/logo.png"
+            src="/logo.PNG"
             width={40}
             height={40}
             alt="TidyTasks"

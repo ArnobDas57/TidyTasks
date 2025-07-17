@@ -66,7 +66,7 @@ const RegisterModule = () => {
         </div>
         <div className="z-10">
           <Image
-            src="/logo.png"
+            src="/logo.PNG"
             alt="Register Visual"
             width={400}
             height={400}
