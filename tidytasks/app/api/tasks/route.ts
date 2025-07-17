@@ -171,30 +171,37 @@ export async function PUT(request: NextRequest) {
   return NextResponse.json(task);
 }
 
-// ✅ DELETE - Delete task
-export async function DELETE(request: NextRequest) {
+export async function DELETE(req: NextRequest) {
   const { user, supabase, response } = await getAuthenticatedUser();
   if (!user) return response;
 
-  const body = await request.json();
-  const { id } = body;
+  try {
+    const body = await req.json();
+    const { task_id } = body;
 
-  if (!id || typeof id !== "string") {
+    if (!task_id) {
+      return NextResponse.json(
+        { error: "Task ID is required." },
+        { status: 400 }
+      );
+    }
+
+    const { error } = await supabase
+      .from("tasks")
+      .delete()
+      .eq("task_id", task_id)
+      .eq("user_id", user.id);
+
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    return NextResponse.json({ message: "Task deleted successfully." });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (error) {
     return NextResponse.json(
-      { error: "Task ID is required." },
-      { status: 400 }
+      { error: "Failed to delete task." },
+      { status: 500 }
     );
   }
-
-  const { error } = await supabase
-    .from("tasks")
-    .delete()
-    .eq("task_id", id)
-    .eq("user_id", user.id);
-
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
-
-  return NextResponse.json({ success: true });
 }

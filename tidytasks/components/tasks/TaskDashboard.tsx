@@ -6,6 +6,7 @@ import { Task, TaskCompletionStatus, TaskPriority } from "@/types/task";
 import { AlertCircleIcon, Loader2 } from "lucide-react";
 import CreateTaskModal from "./CreateTaskModal";
 import { Alert, AlertTitle } from "../ui/alert";
+import { supabase } from "@/utils/supabase/client";
 
 const TaskDashboard = () => {
   const [priorityFilter, setPriorityFilter] = useState<TaskPriority | "All">(
@@ -15,6 +16,7 @@ const TaskDashboard = () => {
   const [loading, setLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [username, setUsername] = useState<string | null>(null);
 
   const completion_status: TaskCompletionStatus[] = [
     "To Do",
@@ -23,9 +25,32 @@ const TaskDashboard = () => {
     "Done",
   ];
 
+  // user and task fetching
   useEffect(() => {
+    fetchUser();
     getTasks();
   }, []);
+
+  const fetchUser = async (): Promise<void> => {
+    try {
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser();
+
+      if (error) {
+        console.error("Supabase error:", error.message);
+        return;
+      }
+
+      if (user) {
+        const name = user.user_metadata?.username || user.email;
+        setUsername(name);
+      }
+    } catch (err) {
+      console.error("Unexpected error fetching user:", err);
+    }
+  };
 
   const getTasks = async () => {
     setLoading(true);
@@ -69,7 +94,9 @@ const TaskDashboard = () => {
     <div className="flex min-h-screen bg-green-100">
       {/* Sidebar */}
       <aside className="w-64 bg-green-200 p-4 border-r overflow-auto">
-        <h2 className="text-xl font-bold mb-6">User&apos;s Tasks</h2>
+        <h2 className="text-xl font-bold mb-6">
+          {username ? username : ""}&apos;s Tasks
+        </h2>
         <nav className="space-y-2 text-gray-700">
           <p className="cursor-pointer hover:text-green-900">Dashboard</p>
           <p className="cursor-pointer hover:text-green-900">Tasks</p>

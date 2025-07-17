@@ -1,8 +1,9 @@
 "use client";
 import { Task } from "@/types/task";
 import TiltedCard from "../ui/TiltedCard";
+import TaskEditModal from "./TaskEditModal";
 import aqua from "../../public/aqua.jpg";
-import React from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 interface TaskCardProps {
@@ -11,6 +12,8 @@ interface TaskCardProps {
 }
 
 const TaskCard = ({ task, onDelete }: TaskCardProps) => {
+  const [showEdit, setShowEdit] = useState(false);
+
   const handleDeleteTask = async () => {
     const confirmed = window.confirm(
       `Are you sure you want to delete "${task.title}"?`
@@ -57,7 +60,7 @@ const TaskCard = ({ task, onDelete }: TaskCardProps) => {
         <p className="text-sm mb-1">{task.description}</p>
         <p className="text-xs text-green-700 mt-2">
           Created at:{" "}
-          {new Date(task.created_at).toLocaleString(undefined, {
+          {new Date(task.created_at ?? "").toLocaleString(undefined, {
             dateStyle: "medium", // e.g., Jul 13, 2025
             timeStyle: "short", // e.g., 5:00 AM
           })}
@@ -67,6 +70,19 @@ const TaskCard = ({ task, onDelete }: TaskCardProps) => {
           className="mt-8 text-xs text-red-600 hover:text-red-800"
         >
           🗑 Delete Task
+        </button>
+        {showEdit && (
+          <TaskEditModal
+            task={task}
+            onClose={() => setShowEdit(false)}
+            onSuccess={onDelete ?? (() => {})} // or use refetchTasks()
+          />
+        )}
+        <button
+          onClick={() => setShowEdit(true)}
+          className="text-xs text-blue-600 hover:text-blue-800 mt-2"
+        >
+          ✏️ Edit Task
         </button>
       </div>
     </div>

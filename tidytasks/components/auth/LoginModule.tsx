@@ -40,7 +40,10 @@ const LoginModule = () => {
     if (error) {
       setErrorMsg(error.message);
     } else {
-      router.push("/dashboard");
+      console.log("✅ Login success. Waiting for session...");
+      setTimeout(() => {
+        router.push("/dashboard");
+      }, 300); // try 300–500ms
     }
   };
 

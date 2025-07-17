@@ -4,13 +4,13 @@ import { FaLock } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { IoPersonSharp } from "react-icons/io5";
 import { AlertCircleIcon } from "lucide-react";
-import { Alert, AlertTitle } from "@/components/ui/alert";
+import { FaCheckCircle } from "react-icons/fa";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import Image from "next/image";
 import Silk from "../ui/Silk";
 import { Button } from "@mui/material";
 import { keyframes } from "@emotion/react";
 import { supabase } from "@/utils/supabase/client";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 const gradientAnimation = keyframes`
@@ -20,13 +20,12 @@ const gradientAnimation = keyframes`
 `;
 
 const RegisterModule = () => {
-  const router = useRouter();
-
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+  const [registerSuccessful, setRegisterSuccessful] = useState<boolean>(false);
 
   const handleRegister = async () => {
     if (!email || !password || !confirmPassword) {
@@ -46,8 +45,9 @@ const RegisterModule = () => {
 
     if (error) {
       setErrorMsg(error.message);
+      setRegisterSuccessful(false);
     } else {
-      router.push("/dashboard");
+      setRegisterSuccessful(true);
     }
   };
 
@@ -163,6 +163,18 @@ const RegisterModule = () => {
                 Register
               </Button>
             </div>
+
+            {registerSuccessful && (
+              <Alert className="mt-10">
+                <FaCheckCircle />
+                <AlertTitle>
+                  Please check your email to confirm signup
+                </AlertTitle>
+                <AlertDescription>
+                  Login to start managing tasks
+                </AlertDescription>
+              </Alert>
+            )}
 
             <div className="mt-10 text-center text-sm bg-green-200 border-2 p-1">
               Already have an account?{" "}
