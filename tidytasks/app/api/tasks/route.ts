@@ -1,8 +1,7 @@
 export const runtime = "nodejs";
 
-import { cookies } from "next/headers";
-import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { NextRequest, NextResponse } from "next/server";
+import { getAuthenticatedUser } from "@/lib/getAuthenticatedUser"; // ✅ FIXED
 import type { TaskPriority, TaskCompletionStatus } from "@/types/task";
 
 // ✅ Valid enums
@@ -14,29 +13,6 @@ const validStatuses: TaskCompletionStatus[] = [
 ];
 
 const validPriorities: TaskPriority[] = ["Low", "Medium", "High", "Urgent"];
-
-// ✅ Auth helper using safe cookies()
-export const getAuthenticatedUser = async () => {
-  const cookieStore = cookies();
-  const supabase = createRouteHandlerClient({
-    cookies: () => cookieStore,
-  });
-
-  const {
-    data: { user },
-    error,
-  } = await supabase.auth.getUser();
-
-  if (error || !user) {
-    return {
-      user: null,
-      supabase,
-      response: NextResponse.json({ error: "Unauthorized" }, { status: 401 }),
-    };
-  }
-
-  return { user, supabase };
-};
 
 // ✅ GET - Fetch tasks for user
 export async function GET() {
@@ -197,7 +173,7 @@ export async function DELETE(req: NextRequest) {
     }
 
     return NextResponse.json({ message: "Task deleted successfully." });
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to delete task." },
